@@ -1,4 +1,3 @@
-import React from "react";
 import { Button } from "./ui/button";
 import { FaGoogle, FaGithub } from "react-icons/fa";
 import { NavLink } from "react-router";

@@ -2,7 +2,7 @@ import useAuth from "@/auth/store";
 import { refreshToken } from "@/services/AuthService";
 import axios from "axios";
 import toast from "react-hot-toast";
-
+console.log("API BASE URL =", import.meta.env.VITE_API_BASE_URL);
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "https://globalauthbackend.onrender.com/api/v1",
   headers: {
@@ -38,7 +38,7 @@ function resolveQueue(newToken: string) {
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const is401 = error.response.status === 401;
+    const is401 = error.response?.status === 401;
     const original = error.config;
     console.log(original);
     console.log("original retry: ", original._retry);
@@ -47,7 +47,7 @@ apiClient.interceptors.response.use(
 
       if (error.response && error.response.data)
         toast.error(error.response.data?.message || "An error occurred");
-      console.error("API Error:", error.response.data);
+      console.error("API Error:", error.response?.data);
       console.error("Full error:", error);
 
       return Promise.reject(error);

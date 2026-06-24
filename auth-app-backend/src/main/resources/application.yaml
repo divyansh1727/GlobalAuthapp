@@ -3,5 +3,3 @@ spring:
     name: projectonauth
     profiles:
       active: dev
-      server:
-       port:8082

@@ -26,7 +26,7 @@ createRoot(document.getElementById('root')!).render(
 
   </Route>
    <Route path="oauth/success" element={<OAuthSuccess />} />
-        <Route path="oauth/failure" element={<OAuthSuccess />} />
+   <Route path="oauth/failure" element={<OAuthSuccess />} />
   </Route>
   </Routes>
   </BrowserRouter>  

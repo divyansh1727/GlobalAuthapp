@@ -38,4 +38,8 @@ export const refreshToken = async () => {
   return response.data;
 };
 
-//apis
+//to update the users
+export const updateUser = async (userId: string, userData: any) => {
+  const response = await apiClient.put(`/users/${userId}`, userData);
+  return response.data;
+};

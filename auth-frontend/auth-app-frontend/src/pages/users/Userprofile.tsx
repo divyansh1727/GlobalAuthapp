@@ -5,11 +5,36 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { motion } from "framer-motion";
 import useAuth from "@/auth/store";
+import { updateUser } from "@/services/AuthService";
+import toast from "react-hot-toast";
 import { useState } from "react";
 
 function Userprofile() {
   const [isEditing, setIsEditing] = useState(false);
   const user = useAuth((state) => state.user);
+  const [formData, setFormData] = useState({
+  name: user?.name || "",
+});
+const handleSave = async () => {
+  try {
+    if (!user?.id) return;
+
+    const updatedUser = await updateUser(user.id, {
+      ...user,
+      name: formData.name,
+    });
+
+    console.log(updatedUser);
+    toast.success("Profile updated successfully!");
+
+    setIsEditing(false);
+
+    // We will update the Zustand store in the next step.
+  } catch (error) {
+    console.error(error);
+    toast.error("Failed to update profile");
+  }
+};
   return (
     <div className="p-6 max-w-3xl mx-auto space-y-8">
       {/* Heading */}
@@ -88,11 +113,16 @@ function Userprofile() {
               <div className="space-y-2">
                 <Label htmlFor="name">Full Name</Label>
                 <Input
-                  id="name"
-                  value={user?.name}
-                  onChange={() => {}}
-                  className="rounded-xl"
-                />
+  id="name"
+  value={formData.name}
+  onChange={(e) =>
+    setFormData({
+      ...formData,
+      name: e.target.value,
+    })
+  }
+  className="rounded-xl"
+/>
               </div>
 
               <div className="space-y-2">
@@ -144,9 +174,9 @@ function Userprofile() {
               </Button>
               <Button
                 className="rounded-2xl w-full"
-                onClick={() => {
+                onClick={handleSave}
                   /* save handler */
-                }}
+                
               >
                 Save
               </Button>

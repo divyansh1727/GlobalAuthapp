@@ -8,11 +8,11 @@ import useAuth from "@/auth/store";
 import { updateUser } from "@/services/AuthService";
 import toast from "react-hot-toast";
 import { useState } from "react";
-import { uploadProfileImage } from "@/services/AuthService";
+// import { uploadProfileImage } from "@/services/AuthService";
 function Userprofile() {
   const [isEditing, setIsEditing] = useState(false);
   const user = useAuth((state) => state.user);
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  // const [selectedImage, setSelectedImage] = useState<File | null>(null);
 const [preview, setPreview] = useState<string | null>(null);
   const [formData, setFormData] = useState({
   name: user?.name || "",
@@ -73,7 +73,7 @@ const handleSave = async () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    setSelectedImage(file);
+    // setSelectedImage(file);
     setPreview(URL.createObjectURL(file));
   }}
 />

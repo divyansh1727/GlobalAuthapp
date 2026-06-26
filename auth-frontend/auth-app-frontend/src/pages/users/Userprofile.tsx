@@ -165,21 +165,20 @@ const handleSave = async () => {
               Edit Profile
             </Button>
           ) : (
-            <div className="flex gap-3 mt-4">
+            <div className="flex flex-col sm:flex-row gap-3 mt-4">
               <Button
-                className="rounded-2xl w-full"
-                onClick={() => setIsEditing(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                className="rounded-2xl w-full"
-                onClick={handleSave}
-                  /* save handler */
-                
-              >
-                Save
-              </Button>
+    className="w-full rounded-2xl"
+    onClick={() => setIsEditing(false)}
+>
+    Cancel
+</Button>
+
+<Button
+    className="w-full rounded-2xl"
+    onClick={handleSave}
+>
+    Save
+</Button>
             </div>
           )}
         </CardContent>

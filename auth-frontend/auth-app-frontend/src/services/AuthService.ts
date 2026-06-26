@@ -43,3 +43,22 @@ export const updateUser = async (userId: string, userData: any) => {
   const response = await apiClient.put(`/users/${userId}`, userData);
   return response.data;
 };
+export const uploadProfileImage = async (
+  userId: string,
+  file: File
+) => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await apiClient.post(
+    `/users/${userId}/image`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  return response.data;
+};

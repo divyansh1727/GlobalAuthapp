@@ -8,10 +8,12 @@ import useAuth from "@/auth/store";
 import { updateUser } from "@/services/AuthService";
 import toast from "react-hot-toast";
 import { useState } from "react";
-
+import { uploadProfileImage } from "@/services/AuthService";
 function Userprofile() {
   const [isEditing, setIsEditing] = useState(false);
   const user = useAuth((state) => state.user);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+const [preview, setPreview] = useState<string | null>(null);
   const [formData, setFormData] = useState({
   name: user?.name || "",
 });
@@ -57,12 +59,32 @@ const handleSave = async () => {
           {/* Avatar */}
           <div className="flex flex-col items-center gap-3">
             <Avatar className="w-28 h-28 border shadow-md">
-              <AvatarImage src="https://api.dicebear.com/7.x/thumbs/svg?seed=user" />
+              <AvatarImage
+  src={preview || user?.image || "https://api.dicebear.com/7.x/thumbs/svg?seed=user"}
+/>
               <AvatarFallback>U</AvatarFallback>
             </Avatar>
-            <Button variant="outline" className="rounded-xl px-5">
-              Change Picture
-            </Button>
+           <input
+  type="file"
+  id="profileImage"
+  accept="image/*"
+  hidden
+  onChange={(e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setSelectedImage(file);
+    setPreview(URL.createObjectURL(file));
+  }}
+/>
+
+<Button
+  variant="outline"
+  className="rounded-xl px-5"
+  onClick={() => document.getElementById("profileImage")?.click()}
+>
+  Change Picture
+</Button>
           </div>
 
           {/* User Details */}

@@ -28,10 +28,13 @@ const handleSave = async () => {
       ...user,
       name: formData.name,
     });
+    console.log("Selected Image:", selectedImage);
 
     // Upload image if selected
     if (selectedImage) {
+      console.log("Uploading image...");
       updatedUser = await uploadProfileImage(user.id, selectedImage);
+      console.log("Upload completed");
     }
     changeLocalLoginData(
   accessToken!,

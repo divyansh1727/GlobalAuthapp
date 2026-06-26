@@ -166,20 +166,20 @@ const handleSave = async () => {
             </Button>
           ) : (
             <div className="flex flex-col sm:flex-row gap-3 mt-4">
-              <Button
-    className="w-full rounded-2xl"
+  <Button
+    className="sm:flex-1 rounded-2xl"
     onClick={() => setIsEditing(false)}
->
+  >
     Cancel
-</Button>
+  </Button>
 
-<Button
-    className="w-full rounded-2xl"
+  <Button
+    className="sm:flex-1 rounded-2xl"
     onClick={handleSave}
->
+  >
     Save
-</Button>
-            </div>
+  </Button>
+</div>
           )}
         </CardContent>
       </Card>

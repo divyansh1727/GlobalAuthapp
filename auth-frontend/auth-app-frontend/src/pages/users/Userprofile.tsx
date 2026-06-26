@@ -8,12 +8,14 @@ import useAuth from "@/auth/store";
 import { updateUser } from "@/services/AuthService";
 import toast from "react-hot-toast";
 import { useState } from "react";
-// import { uploadProfileImage } from "@/services/AuthService";
+import { uploadProfileImage } from "@/services/AuthService";
 function Userprofile() {
   const [isEditing, setIsEditing] = useState(false);
   const user = useAuth((state) => state.user);
-  // const [selectedImage, setSelectedImage] = useState<File | null>(null);
-const [preview, setPreview] = useState<string | null>(null);
+  const changeLocalLoginData = useAuth((state) => state.changeLocalLoginData);
+  const accessToken = useAuth((state) => state.accessToken);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
   const [formData, setFormData] = useState({
   name: user?.name || "",
 });
@@ -21,17 +23,32 @@ const handleSave = async () => {
   try {
     if (!user?.id) return;
 
-    const updatedUser = await updateUser(user.id, {
+    // Update name
+    let updatedUser = await updateUser(user.id, {
       ...user,
       name: formData.name,
     });
 
+    // Upload image if selected
+    if (selectedImage) {
+      updatedUser = await uploadProfileImage(user.id, selectedImage);
+    }
+    changeLocalLoginData(
+  accessToken!,
+  updatedUser,
+  true
+);
+
     console.log(updatedUser);
+
     toast.success("Profile updated successfully!");
 
+    setPreview(null);
+    setSelectedImage(null);
     setIsEditing(false);
 
-    // We will update the Zustand store in the next step.
+    // Next step:
+    // Update Zustand store
   } catch (error) {
     console.error(error);
     toast.error("Failed to update profile");
@@ -73,7 +90,7 @@ const handleSave = async () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // setSelectedImage(file);
+    setSelectedImage(file);
     setPreview(URL.createObjectURL(file));
   }}
 />

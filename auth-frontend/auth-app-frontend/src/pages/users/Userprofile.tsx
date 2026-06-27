@@ -8,6 +8,7 @@ import useAuth from "@/auth/store";
 import { updateUser } from "@/services/AuthService";
 import toast from "react-hot-toast";
 import { useState } from "react";
+import { changePassword } from "@/services/AuthService";
 import { uploadProfileImage } from "@/services/AuthService";
 function Userprofile() {
   const [isEditing, setIsEditing] = useState(false);
@@ -16,6 +17,11 @@ function Userprofile() {
   const accessToken = useAuth((state) => state.accessToken);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [passwordData, setPasswordData] = useState({
+  currentPassword: "",
+  newPassword: "",
+  confirmPassword: "",
+});
   const [formData, setFormData] = useState({
   name: user?.name || "",
 });
@@ -55,6 +61,24 @@ const handleSave = async () => {
   } catch (error) {
     console.error(error);
     toast.error("Failed to update profile");
+  }
+};
+const handleChangePassword = async () => {
+  try {
+    if (!user?.id) return;
+
+    await changePassword(user.id, passwordData);
+
+    toast.success("Password changed successfully!");
+
+    setPasswordData({
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    });
+  } catch (error) {
+    console.error(error);
+    toast.error("Failed to change password");
   }
 };
   return (
@@ -232,12 +256,53 @@ const handleSave = async () => {
           <CardTitle className="text-xl">Account Settings</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Button
-            variant="outline"
-            className="w-full rounded-xl py-3 text-base"
-          >
-            Change Password
-          </Button>
+          <div className="space-y-4">
+
+  <Input
+    type="password"
+    placeholder="Current Password"
+    value={passwordData.currentPassword}
+    onChange={(e) =>
+      setPasswordData({
+        ...passwordData,
+        currentPassword: e.target.value,
+      })
+    }
+  />
+
+  <Input
+    type="password"
+    placeholder="New Password"
+    value={passwordData.newPassword}
+    onChange={(e) =>
+      setPasswordData({
+        ...passwordData,
+        newPassword: e.target.value,
+      })
+    }
+  />
+
+  <Input
+    type="password"
+    placeholder="Confirm Password"
+    value={passwordData.confirmPassword}
+    onChange={(e) =>
+      setPasswordData({
+        ...passwordData,
+        confirmPassword: e.target.value,
+      })
+    }
+  />
+
+  <Button
+    variant="outline"
+    className="w-full rounded-xl py-3"
+    onClick={handleChangePassword}
+  >
+    Update Password
+  </Button>
+
+</div>
           <Button
             variant="destructive"
             className="w-full rounded-xl py-3 text-base"

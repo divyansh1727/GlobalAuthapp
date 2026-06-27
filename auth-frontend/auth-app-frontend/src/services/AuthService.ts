@@ -3,6 +3,7 @@ import apiClient from "@/config/ApiClient";
 import type LoginData from "@/models/LoginData";
 import type LoginResponseData from "@/models/LoginResponseData";
 import type User from "@/models/User";
+import type ChangePasswordRequest from "@/models/ChangePasswordRequest";
 //register function
 export const registerUser = async (signupData: RegisterData) => {
   // api  call to server to save data
@@ -53,6 +54,20 @@ export const uploadProfileImage = async (
   const response = await apiClient.post(
     `/users/${userId}/image`,
     formData
+  );
+
+  return response.data;
+};
+
+
+
+export const changePassword = async (
+  userId: string,
+  data: ChangePasswordRequest
+) => {
+  const response = await apiClient.post(
+    `/users/${userId}/change-password`,
+    data
   );
 
   return response.data;

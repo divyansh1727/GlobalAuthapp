@@ -35,7 +35,7 @@ function Userprofile() {
   newPassword: "",
   confirmPassword: "",
 });
-const [deletePassword, setDeletePassword] = useState("");
+// const [deletePassword, setDeletePassword] = useState("");
   const [formData, setFormData] = useState({
   name: user?.name || "",
 });
@@ -108,7 +108,7 @@ const handleDeleteAccount = async () => {
 
     if (!confirmDelete) return;
 
-    await deleteAccount(user.id, deletePassword);
+    await deleteAccount(user.id, "");
 
     toast.success("Account deleted successfully");
 

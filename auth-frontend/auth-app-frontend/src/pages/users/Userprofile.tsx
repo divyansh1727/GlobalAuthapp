@@ -8,6 +8,8 @@ import useAuth from "@/auth/store";
 import { updateUser } from "@/services/AuthService";
 import toast from "react-hot-toast";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { deleteAccount } from "@/services/AuthService";
 import { changePassword } from "@/services/AuthService";
 import { uploadProfileImage } from "@/services/AuthService";
 function Userprofile() {
@@ -22,9 +24,13 @@ function Userprofile() {
   newPassword: "",
   confirmPassword: "",
 });
+const [deletePassword, setDeletePassword] = useState("");
   const [formData, setFormData] = useState({
   name: user?.name || "",
 });
+const navigate = useNavigate();
+
+const logout = useAuth((state) => state.logout);
 const handleSave = async () => {
   try {
     if (!user?.id) return;
@@ -79,6 +85,28 @@ const handleChangePassword = async () => {
   } catch (error) {
     console.error(error);
     toast.error("Failed to change password");
+  }
+};
+const handleDeleteAccount = async () => {
+  try {
+    if (!user?.id) return;
+
+    const confirmDelete = window.confirm(
+      "Are you sure? This action cannot be undone."
+    );
+
+    if (!confirmDelete) return;
+
+    await deleteAccount(user.id, deletePassword);
+
+    toast.success("Account deleted successfully");
+
+    logout();
+
+    navigate("/login");
+  } catch (error) {
+    console.error(error);
+    toast.error("Failed to delete account");
   }
 };
   return (
@@ -303,12 +331,26 @@ const handleChangePassword = async () => {
   </Button>
 
 </div>
-          <Button
-            variant="destructive"
-            className="w-full rounded-xl py-3 text-base"
-          >
-            Delete Account
-          </Button>
+          <div className="space-y-3">
+
+  {user?.provider === "LOCAL" && (
+    <Input
+      type="password"
+      placeholder="Enter password to delete account"
+      value={deletePassword}
+      onChange={(e) => setDeletePassword(e.target.value)}
+    />
+  )}
+
+  <Button
+    variant="destructive"
+    className="w-full"
+    onClick={handleDeleteAccount}
+  >
+    Delete Account
+  </Button>
+
+</div>
         </CardContent>
       </Card>
     </div>

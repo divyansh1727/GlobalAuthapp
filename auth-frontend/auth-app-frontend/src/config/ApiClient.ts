@@ -5,9 +5,6 @@ import toast from "react-hot-toast";
 console.log("API BASE URL =", import.meta.env.VITE_API_BASE_URL);
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "https://globalauthbackend.onrender.com/api/v1",
-  headers: {
-    "Content-Type": "application/json",
-  },
   withCredentials: true,
   timeout: 10000,
 });

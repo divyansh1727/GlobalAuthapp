@@ -35,7 +35,7 @@ function Userprofile() {
   newPassword: "",
   confirmPassword: "",
 });
-// const [deletePassword, setDeletePassword] = useState("");
+const [deletePassword, setDeletePassword] = useState("");
   const [formData, setFormData] = useState({
   name: user?.name || "",
 });
@@ -102,19 +102,21 @@ const handleDeleteAccount = async () => {
   try {
     if (!user?.id) return;
 
-    const confirmDelete = window.confirm(
-      "Are you sure? This action cannot be undone."
-    );
+    if (user.provider === "LOCAL" && !deletePassword.trim()) {
+      toast.error("Please enter your password.");
+      return;
+    }
 
-    if (!confirmDelete) return;
-
-    await deleteAccount(user.id, "");
+    await deleteAccount(user.id, deletePassword);
 
     toast.success("Account deleted successfully");
 
-    logout();
+    setDeletePassword("");
+
+    await logout();
 
     navigate("/login");
+
   } catch (error) {
     console.error(error);
     toast.error("Failed to delete account");
@@ -363,6 +365,21 @@ const handleDeleteAccount = async () => {
         <br />
         Your profile, uploaded image, and account information will be permanently deleted.
       </AlertDialogDescription>
+      {user?.provider === "LOCAL" && (
+  <div className="mt-4 space-y-2">
+    <Label htmlFor="deletePassword">
+      Enter your password to confirm
+    </Label>
+
+    <Input
+      id="deletePassword"
+      type="password"
+      placeholder="Password"
+      value={deletePassword}
+      onChange={(e) => setDeletePassword(e.target.value)}
+    />
+  </div>
+)}
     </AlertDialogHeader>
 
     <AlertDialogFooter>

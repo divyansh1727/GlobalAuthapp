@@ -11,6 +11,17 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteAccount } from "@/services/AuthService";
 import { changePassword } from "@/services/AuthService";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { uploadProfileImage } from "@/services/AuthService";
 function Userprofile() {
   const [isEditing, setIsEditing] = useState(false);
@@ -331,26 +342,43 @@ const handleDeleteAccount = async () => {
   </Button>
 
 </div>
-          <div className="space-y-3">
+          <AlertDialog>
+  <AlertDialogTrigger asChild>
+    <Button
+      variant="destructive"
+      className="w-full rounded-xl py-3 text-base"
+    >
+      Delete Account
+    </Button>
+  </AlertDialogTrigger>
 
-  {user?.provider === "LOCAL" && (
-    <Input
-      type="password"
-      placeholder="Enter password to delete account"
-      value={deletePassword}
-      onChange={(e) => setDeletePassword(e.target.value)}
-    />
-  )}
+  <AlertDialogContent>
+    <AlertDialogHeader>
+      <AlertDialogTitle>
+        Delete Account?
+      </AlertDialogTitle>
 
-  <Button
-    variant="destructive"
-    className="w-full"
-    onClick={handleDeleteAccount}
-  >
-    Delete Account
-  </Button>
+      <AlertDialogDescription>
+        This action cannot be undone.
+        <br />
+        Your profile, uploaded image, and account information will be permanently deleted.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
 
-</div>
+    <AlertDialogFooter>
+      <AlertDialogCancel>
+        Cancel
+      </AlertDialogCancel>
+
+      <AlertDialogAction
+        onClick={handleDeleteAccount}
+        className="bg-red-600 hover:bg-red-700"
+      >
+        Delete Account
+      </AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>
         </CardContent>
       </Card>
     </div>
